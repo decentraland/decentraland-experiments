@@ -18,8 +18,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm test
+      - name: installing
+        run: npm ci
+      - name: testing
+        run: npm test
         env:
           CI: true
 
@@ -32,13 +34,15 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
-      - name: setting auth variables
+      - name: installing
+        run: npm ci
+      - name: building
+        run: npm run build
+      - name: releasing
+        run: npm run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: npm ci
-      - run: npm run build
-      - run: npm run semantic-release
   #
   # publish-npm:
   #   needs: release
