@@ -7,5 +7,6 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest'
   },
+  passWithNoTests: true,
   verbose: true
 }
