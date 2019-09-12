@@ -1,0 +1,43 @@
+{
+  "name": "decentraland-experiments",
+  "version": "0.0.0-development",
+  "description": "Experiment Tracking Tool (A/B Testing)",
+  "main": "dist",
+  "dependencies": {
+    "react": "^16.3.0"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^3.0.4",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.5",
+    "@types/segment-analytics": "0.0.32",
+    "jest": "^24.9.0",
+    "semantic-release": "^15.13.24",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.6.3"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "tsc --project tsconfig.json",
+    "semantic-release": "semantic-release"
+  },
+  "release": {
+    "branch": "master",
+    "ci": false,
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/decentraland/experiments.git"
+  },
+  "bugs": {
+    "url": "https://github.com/decentraland/experiments/issues"
+  },
+  "homepage": "https://github.com/decentraland/experiments#readme"
+}
