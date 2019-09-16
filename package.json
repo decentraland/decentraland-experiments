@@ -3,27 +3,48 @@
   "version": "0.0.0-development",
   "description": "Experiment Tracking Tool (A/B Testing)",
   "main": "dist",
-  "dependencies": {
-    "react": "^16.3.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.4",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.5",
     "@types/segment-analytics": "0.0.32",
+    "eventemitter3": "^4.0.0",
     "jest": "^24.9.0",
+    "jest-date-mock": "^1.0.7",
+    "jest-mock-random": "^1.0.2",
     "semantic-release": "^15.13.24",
     "ts-jest": "^24.0.2",
     "typescript": "^3.6.3"
   },
   "scripts": {
-    "test": "jest --passWithNoTests",
+    "test": "jest",
     "build": "tsc --project tsconfig.json",
     "semantic-release": "semantic-release"
   },
   "release": {
     "branch": "master",
     "ci": false
+  },
+  "jest": {
+    "clearMocks": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**",
+      "!src/__mock__/**"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/*.test.ts"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "verbose": true
   },
   "repository": {
     "type": "git",
