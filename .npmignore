@@ -1,4 +1,6 @@
 src
+dist/__mock__
+coverage
 tsconfig.json
 tslint.json
 .nyc_output
