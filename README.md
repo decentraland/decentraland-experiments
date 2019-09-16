@@ -7,7 +7,16 @@
 
 > Implemented from [RFC](RCF.md) ([#54](https://github.com/decentraland/decentraland-dapps/issues/54))
 
-## Instalation
+## Index
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Vanilla JS](#vanilla-js)
+  - [React](#react)
+  - [React+Context](#react--context)
+- [Testing](#testing-with-jest)
+
+## Installation
 
 ```bash
   npm install -s decentraland-experiments
