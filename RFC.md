@@ -63,7 +63,7 @@ const value = experiments.getCurrentValueFor('avatar_signup_test', 'Sing Up')
 Track segments events
 
 ```typescript
-analytics.track(SINGUP_EVENT)
+analytics.track(SIGNUP_EVENT)
 ```
 
 > NOTE: It is not necessary to know which segment event complete the test, that logic is managed by each test
@@ -93,7 +93,7 @@ Add `Context` to the testing element and retrieve the test value
 
 ```jsx
 
-  export default class SingUpButton extends React.PureComponent<Props, State> {
+  export default class SignUpButton extends React.PureComponent<Props, State> {
 
     static contextType = ExperimentsContext
 
@@ -111,13 +111,13 @@ Track segments events
 
 ```jsx
 
-  export default class SingUpButton extends React.PureComponent<Props, State> {
+  export default class SignUpButton extends React.PureComponent<Props, State> {
 
     static contextType = ExperimentsContext
 
     handleClick = (event: React.MouseEvent<HTMLElement>) => {
       // ...
-      analytics.track(SINGUP_EVENT)
+      analytics.track(SIGNUP_EVENT)
     }
 
     render() {
@@ -248,13 +248,13 @@ import Variant from '.../Variant'
 const experiments = {
   // ...
   avatar_signup_test: new Experiment({
-    name: 'singup_vs_send',
+    name: 'signup_vs_send',
     variants: [
-      new Variant('singup', 0.5, 'Sign up'),
+      new Variant('signup', 0.5, 'Sign up'),
       new Variant('send', 0.5, 'Send')
     ],
     trace: (event: SegmentEvent, currentExperiment: Experiment) => {
-      if (event.type === 'track' && event.name === SINGUP_EVENT) {
+      if (event.type === 'track' && event.name === SIGNUP_EVENT) {
         currentExperiment.complete()
       }
     }
@@ -275,9 +275,9 @@ import Variant from '.../Variant'
 const experiments = {
   // ...
   avatar_signup_test: new Experiment({
-    name: 'singup_vs_send',
+    name: 'signup_vs_send',
     variants: [
-      new Variant('singup', 0.5, 'Sign up'),
+      new Variant('signup', 0.5, 'Sign up'),
       new Variant('send', 0.5, 'Send')
     ],
     initialState: () => {
@@ -287,7 +287,7 @@ const experiments = {
       }
     },
     trace: (event: SegmentEvent, currentExperiment: Experiment) => {
-      if (event.type === 'track' && event.name === SINGUP_EVENT) {
+      if (event.type === 'track' && event.name === SIGNUP_EVENT) {
         const startAt = currentExperiment.state
         currentExperiment.setState({ duration: Date.now() - startAt })
         currentExperiment.complete()
@@ -310,9 +310,9 @@ import Variant from '.../Variant'
 const experiments = {
   // ...
   avatar_signup_test: new Experiment({
-    name: 'singup_vs_send',
+    name: 'signup_vs_send',
     variants: [
-      new Variant('singup', 0.5, 'Sign up'),
+      new Variant('signup', 0.5, 'Sign up'),
       new Variant('send', 0.5, 'Send')
     ],
     initialState: () => {
@@ -321,11 +321,11 @@ const experiments = {
       }
     },
     trace: (event: SegmentEvent, currentExperiment: Experiment) => {
-      if (event.type === 'track' && event.name === SINGUP_EVENT) {
+      if (event.type === 'track' && event.name === SIGNUP_EVENT) {
         currentExperiment.complete()
       } else if (
         event.type === 'track' &&
-        event.name === SINGUP_VALIDATION_ERROR
+        event.name === SIgNUP_VALIDATION_ERROR
       ) {
         const validationErrors = currentExperiment.state
         currentExperiment.setState({ validationErrors: validationErrors + 1 })
@@ -348,9 +348,9 @@ import Variant from '.../Variant'
 const experiments = {
   // ...
   avatar_signup_test: new Experiment({
-    name: 'singup_vs_send',
+    name: 'signup_vs_send',
     variants: [
-      new Variant('singup', 0.5, 'Sign up'),
+      new Variant('signup', 0.5, 'Sign up'),
       new Variant('send', 0.5, 'Send')
     ],
     initialState: () => {
@@ -359,7 +359,7 @@ const experiments = {
       }
     },
     trace: (event: SegmentEvent, currentExperiment: Experiment) => {
-      if (event.type === 'track' && event.name === SINGUP_EVENT) {
+      if (event.type === 'track' && event.name === SIGNUP_EVENT) {
         currentExperiment.setState({
           initialMana: event.properties.initialMana
         })
