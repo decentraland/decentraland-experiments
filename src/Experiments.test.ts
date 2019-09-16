@@ -8,13 +8,14 @@ import {
 import root from './window'
 import analytics, { off, on, track } from './__mock__/analytics'
 import random from './__mock__/random'
-import { getItem, setItem } from './__mock__/storage'
+import { getItem, setItem } from './__mock__/localStorage'
+import { getItem as getSessionItem } from './__mock__/sessionStorage'
 import { addEventListener, removeEventListener } from './__mock__/window'
 import { error } from './__mock__/console'
 
 const SIGN_UP_EVENT = 'sign_up_event'
 
-function createExperiments() {
+function createExperiments(storage: Storage = root.localStorage) {
   return new Experiments(
     {
       avatar_sign_up_test: new Experiment<string>({
@@ -45,7 +46,7 @@ function createExperiments() {
         }
       })
     },
-    root.localStorage,
+    storage,
     analytics
   )
 }
@@ -56,6 +57,10 @@ describe(`src/Experiments`, () => {
       createExperiments()
       expect(getItem.mock.calls.length).toEqual(1)
       expect(getItem.mock.calls[0]).toEqual([PERSIST_KEY])
+
+      createExperiments(root.sessionStorage)
+      expect(getSessionItem.mock.calls.length).toEqual(1)
+      expect(getSessionItem.mock.calls[0]).toEqual([PERSIST_KEY])
     })
     test(`must log and should not fail if persisted data is invalid`, () => {
       getItem.mockReturnValueOnce('-')
