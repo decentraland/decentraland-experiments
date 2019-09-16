@@ -167,7 +167,7 @@ Define each experiment
     /**
      * list of values available for the experiment
      */
-    variations: Array<Variation<T>>;
+    variants: Array<Variant<T>>;
 
     /**
      * initial state for the experiment
@@ -189,7 +189,7 @@ Define each experiment
   interface Experiment<T, S extends {} = {}> {
 
     /**
-     * value of the current variation
+     * value of the current variant
      */
     value: T;
 
@@ -212,21 +212,21 @@ Define each experiment
 
 ```
 
-## Variation API (JS)
+## Variant API (JS)
 
 ```typescript
-interface VariationConstructor<T> {
-  new (name: string, ratio: number, value: T): Variation<T>
+interface VariantConstructor<T> {
+  new (name: string, ratio: number, value: T): Variant<T>
 }
 
-interface Variation<T> {
+interface Variant<T> {
   /**
-   * id of de current variation on segment
+   * id of de current variant on segment
    */
   name: string
 
   /**
-   * number between 0 and 1, define de probability to get this variation
+   * number between 0 and 1, define de probability to get this variant
    */
   ratio: number
 
