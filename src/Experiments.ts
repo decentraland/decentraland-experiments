@@ -35,18 +35,24 @@ export default class Experiments {
   constructor(
     private experiments: ExperimentMap,
     private storage: Storage = window.localStorage,
-    private analytics:
-      | SegmentAnalytics.AnalyticsJS
-      | undefined = window.analytics
+    private _analytics: SegmentAnalytics.AnalyticsJS | null | undefined
   ) {
     if (this.analytics) {
       this.analytics.on('track', this.handleTrackEvent)
+    } else {
+      console.warn(
+        `Analytics is not present in the project, experiments framework will not generate any report. Follow this guide to include it: https://segment.com/docs/sources/website/analytics.js/quickstart/`
+      )
     }
 
     this.loadPersisted()
     if (this.isBrowserStorage()) {
       window.addEventListener('storage', this.handleStorageChange)
     }
+  }
+
+  get analytics() {
+    return this._analytics || window.analytics || null
   }
 
   /**
@@ -178,7 +184,7 @@ export default class Experiments {
       this.activeExperiments.delete(experiment)
 
       if (this.analytics) {
-        const experimentState = experiment.state || {}
+        const experimentState = experiment.state
         this.analytics.track('experiment_conversion', {
           experiment: experiment.name,
           variation: experiment.variant.name,

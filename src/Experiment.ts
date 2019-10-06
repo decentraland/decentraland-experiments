@@ -156,7 +156,7 @@ export default class Experiment<
    * Modify de state using `Object.assign`
    */
   setState(patchState: Partial<State>): void {
-    if (this.state !== undefined) {
+    if (patchState && this.isActive() && !this.isCompleted()) {
       this.state = Object.assign({}, this.state, patchState)
     }
   }

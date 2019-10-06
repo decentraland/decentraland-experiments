@@ -11,21 +11,31 @@ import random from './__mock__/random'
 import { getItem, setItem } from './__mock__/localStorage'
 import { getItem as getSessionItem } from './__mock__/sessionStorage'
 import { addEventListener, removeEventListener } from './__mock__/window'
-import { error } from './__mock__/console'
+import { error, warn } from './__mock__/console'
 
 const SIGN_UP_EVENT = 'sign_up_event'
 
-function createExperiments(storage: Storage = root.localStorage) {
+function createExperiments(
+  storage: Storage = root.localStorage,
+  segment: SegmentAnalytics.AnalyticsJS | null = analytics
+) {
   return new Experiments(
     {
-      avatar_sign_up_test: new Experiment<string>({
+      avatar_sign_up_test: new Experiment<string, { calls: number }>({
         name: 'sign_up_vs_send',
+        initialState: () => ({ calls: 0 }),
         variants: [
           new Variant('sign_up', 0.5, 'Sign up'),
           new Variant('send', 0.5, 'Send')
         ],
-        track(event: SegmentEvent<{}>, currentExperiment: Experiment<string>) {
+        track(
+          event: SegmentEvent<{}>,
+          currentExperiment: Experiment<string, { calls: number }>
+        ) {
           if (event.type === 'track' && event.name === SIGN_UP_EVENT) {
+            currentExperiment.setState({
+              calls: currentExperiment.state.calls + 1
+            })
             currentExperiment.complete()
           }
         }
@@ -47,7 +57,7 @@ function createExperiments(storage: Storage = root.localStorage) {
       })
     },
     storage,
-    analytics
+    segment
   )
 }
 
@@ -74,11 +84,6 @@ describe(`src/Experiments`, () => {
         '-'
       ])
     })
-    test(`must listen for analytics event`, () => {
-      const experiments = createExperiments()
-      expect(on.mock.calls.length).toEqual(1)
-      expect(on.mock.calls[0]).toEqual(['track', experiments.handleTrackEvent])
-    })
     test(`must listen for storage event`, () => {
       const experiments = createExperiments()
       expect(addEventListener.mock.calls.length).toEqual(1)
@@ -87,9 +92,23 @@ describe(`src/Experiments`, () => {
         experiments.handleStorageChange
       ])
     })
-  })
-  describe(`.emit()`, () => {
-    test(``, () => {})
+    test(`must listen for analytics event`, () => {
+      const experiments = createExperiments()
+      expect(on.mock.calls.length).toEqual(1)
+      expect(on.mock.calls[0]).toEqual(['track', experiments.handleTrackEvent])
+    })
+    test(`must listen for window.analytics event`, () => {
+      root.analytics = analytics
+      const experiments = createExperiments(root.localStorage, null)
+      expect(on.mock.calls.length).toEqual(1)
+      expect(on.mock.calls[0]).toEqual(['track', experiments.handleTrackEvent])
+      delete root.analytics
+    })
+    test(`must not fail if analytics isn't present`, () => {
+      createExperiments(root.localStorage, null)
+      expect(on.mock.calls.length).toEqual(0)
+      expect(warn.mock.calls.length).toEqual(1)
+    })
   })
   describe(`.detach()`, () => {
     test(`must remove all analytics event`, () => {
@@ -244,7 +263,7 @@ describe(`src/Experiments`, () => {
       expect(track.mock.calls.length).toEqual(2)
       expect(track.mock.calls[1]).toEqual([
         'experiment_conversion',
-        { experiment: 'sign_up_vs_send', variation: 'sign_up' }
+        { experiment: 'sign_up_vs_send', variation: 'sign_up', calls: 1 }
       ])
     })
     test(`must complete the experiment and track the experiment_conversion event when the experiment fail on track`, () => {
