@@ -29,13 +29,13 @@ export default class Experiments {
 
   /**
    * @param experiments - list of experiment running
-   * @param storage - to persist the same result for the user
-   * @param analytics - segment api
+   * @param _storage - to persist the same result for the user
+   * @param _analytics - segment api
    */
   constructor(
     private experiments: ExperimentMap,
-    private storage: Storage = window.localStorage,
-    private _analytics: SegmentAnalytics.AnalyticsJS | null | undefined
+    private _storage?: Storage,
+    private _analytics?: SegmentAnalytics.AnalyticsJS | null
   ) {
     if (this.analytics) {
       this.analytics.on('track', this.handleTrackEvent)
@@ -49,6 +49,10 @@ export default class Experiments {
     if (this.isBrowserStorage()) {
       window.addEventListener('storage', this.handleStorageChange)
     }
+  }
+
+  get storage() {
+    return this._storage || window.localStorage
   }
 
   get analytics() {
